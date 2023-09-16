@@ -57,8 +57,12 @@ namespace Lab1
                         Console.WriteLine("Введите пол (м/ж): ");
                         string sex = Console.ReadLine();
                         Console.WriteLine("Введите возраст: ");
-                        int age = Int32.Parse(Console.ReadLine());
-                        Functions.AddNoteToFile(surname, name, patronomyc, sex, age, ref students);
+                        try
+                        {
+                            int age = Int32.Parse(Console.ReadLine());
+                            Functions.AddNoteToFile(surname, name, patronomyc, sex, age, ref students);
+                        }
+                        catch (Exception ex) { Console.WriteLine("Форма заполнена не верно!\n"); }
                         break;
                     case ConsoleKey.Escape:
                         return;
