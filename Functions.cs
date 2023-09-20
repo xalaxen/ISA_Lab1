@@ -10,48 +10,51 @@ namespace Lab1
 {
     public class Functions
     {
-        public static ObservableCollection<Student> ReadAllDate(string path)
+        public List<Student> ReadAllDate(string path)
         {
-            ObservableCollection<Student> students = new ObservableCollection<Student>();
-            try
+            List<Student> students = new List<Student>();
+            using (StreamReader sr = new StreamReader(path))
             {
-                using (StreamReader sr = new StreamReader(path))
+                string tempNotes;
+                while ((tempNotes = sr.ReadLine()) != null)
                 {
-                    string tempNotes;
-                    while ((tempNotes = sr.ReadLine()) != null)
+                    try
                     {
-                        students.Add(new Student(tempNotes.Split(',')[0], tempNotes.Split(',')[1],
-                                                tempNotes.Split(',')[2], Convert.ToBoolean(tempNotes.Split(',')[3]),
+                        students.Add(new Student(tempNotes.Split(',')[0],
+                                                tempNotes.Split(',')[1],
+                                                tempNotes.Split(',')[2],
+                                                Convert.ToBoolean(tempNotes.Split(',')[3]),
                                                 Convert.ToInt32(tempNotes.Split(',')[4])));
                     }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
             }
 
             return students;
         }
 
-        public static void PrintAllNotes(ObservableCollection<Student> students)
+        public void PrintAllNotes(List<Student> students)
         {
             for (int i = 0; i < students.Count; i++)
             {
-                Console.WriteLine((i + 1) + ": " + "ФИО: " + students[i].Surname + " " + students[i].Name + " " + students[i].Patronymic +
-                    " | Пол: " + ConvertSex(students[i].Sex) + " | Возраст: " + students[i].Age
-                    );
+                Console.WriteLine((i + 1) + ": " + 
+                    "ФИО: " + students[i].Surname + " " + students[i].Name + " " + students[i].Patronymic +
+                    " | Пол: " + ConvertSex(students[i].Sex) + 
+                    " | Возраст: " + students[i].Age);
             }
             Console.WriteLine("\n");
         }
 
-        public static string ConvertSex(bool s)
+        public string ConvertSex(bool s)
         {
             if (s == true) { return "М"; }
             else { return "Ж"; }
         }
 
-        public static void PrintNotesByNumber(int note_number, ref ObservableCollection<Student> students)
+        public void PrintNotesByNumber(int note_number, ref List<Student> students)
         {
             try
             {
@@ -66,7 +69,7 @@ namespace Lab1
 
         }
 
-        public static void WriteNotesToFile(ref ObservableCollection<Student> students, string path)
+        public void WriteNotesToFile(ref List<Student> students, string path)
         {
             using (StreamWriter sw = new StreamWriter(path, false))
             {
@@ -80,13 +83,13 @@ namespace Lab1
             Console.WriteLine("Даныне записаны в файл!\n");
         }
 
-        public static void RemoveNotesFromFile(int note_number, ref ObservableCollection<Student> students)
+        public void RemoveNotesFromFile(int note_number, ref List<Student> students)
         {
             try { students.RemoveAt(note_number); }
             catch (Exception e) { Console.WriteLine("Записи с таким номром не существует!\n"); }
         }
 
-        public static void AddNoteToFile(string surname, string name, string patronymic, string sex, int age, ref ObservableCollection<Student> students)
+        public void AddNoteToFile(string surname, string name, string patronymic, string sex, int age, ref List<Student> students)
         {
             bool tsex = true;
             if (sex == "М" || sex == "м") { tsex = true; }

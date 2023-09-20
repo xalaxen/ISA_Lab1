@@ -11,14 +11,13 @@ namespace Lab1
 {
     class Program
     {
-        static string path = "students.csv";
         static void Main(string[] args)
         {
-            ObservableCollection<Student> students = Functions.ReadAllDate(path);
+            string path = "students.csv";
+            Functions fn = new Functions();
+            List<Student> students = fn.ReadAllDate(path);
             while (true)
             {
-                ConsoleKey ans;
-                int note_number;
                 Console.WriteLine("Что хотите сделать?:\n" +
                     "1. Вывод всех записей на экран.\n" +
                     "2. Вывод записи по номеру.\n" +
@@ -26,26 +25,26 @@ namespace Lab1
                     "4. Удаление записи из файла.\n" +
                     "5. Добавление записи в файл.\n" +
                     "Выход из приложения - ESC.\n");
-                ans = Console.ReadKey().Key;
+                ConsoleKey ans = Console.ReadKey().Key;
                 Console.WriteLine();
 
                 switch (ans)
                 {
                     case ConsoleKey.D1:
-                        Functions.PrintAllNotes(students);
+                        fn.PrintAllNotes(students);
                         break;
                     case ConsoleKey.D2:
                         Console.WriteLine("Введите номер записи для вывода: ");
-                        note_number = Convert.ToInt32(Console.ReadLine());
-                        Functions.PrintNotesByNumber(note_number, ref students);
+                        int note_number = Convert.ToInt32(Console.ReadLine());
+                        fn.PrintNotesByNumber(note_number, ref students);
                         break;
                     case ConsoleKey.D3:
-                        Functions.WriteNotesToFile(ref students, path);
+                        fn.WriteNotesToFile(ref students, path);
                         break;
                     case ConsoleKey.D4:
                         Console.WriteLine("Введите номер записи для удаления: ");
                         int note_delete = Int32.Parse(Console.ReadLine()) - 1;
-                        Functions.RemoveNotesFromFile(note_delete, ref students);
+                        fn.RemoveNotesFromFile(note_delete, ref students);
                         break;
                     case ConsoleKey.D5:
                         Console.WriteLine("Введите фамилию: ");
@@ -60,7 +59,7 @@ namespace Lab1
                         try
                         {
                             int age = Int32.Parse(Console.ReadLine());
-                            Functions.AddNoteToFile(surname, name, patronomyc, sex, age, ref students);
+                            fn.AddNoteToFile(surname, name, patronomyc, sex, age, ref students);
                         }
                         catch (Exception ex) { Console.WriteLine("Форма заполнена не верно!\n"); }
                         break;
